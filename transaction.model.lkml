@@ -1,12 +1,13 @@
 connection: "lookerdata_standard_sql"
 
-include: "*.view.lkml"         # include all views in this project
+include: "*.view.lkml"
+include: "trans_explores.explore.lkml"
+# include all views in this project
 # include: "*.dashboard.lookml"  # include all dashboards in this project
 
 datagroup: product_data_group {
   max_cache_age: "4 hours"
 }
-
 
 explore: adidas {
   join: adidas_trans {

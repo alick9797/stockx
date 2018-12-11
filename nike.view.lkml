@@ -7,6 +7,32 @@ view: nike {
     sql: CONCAT(${TABLE}.Item_Name, ' ', ${size});;
   }
 
+  filter: string_input {
+    type: string
+    suggestions: ["Commercial", "Non-Commercial"]
+  }
+
+  dimension: shoe_size_category {
+    type: string
+    sql: CASE WHEN ${shoe_size} <= 4.0 THEN 'Commercial'
+          WHEN ${shoe_size} > 4.0 THEN 'Non-Commercial'
+          END ;;
+  }
+
+  dimension: user_attribute_label {
+    type: string
+    sql: CASE WHEN ${shoe_size} <= 4.0 THEN "{{_user_attributes['last_name']}}"
+          WHEN ${shoe_size} > 4.0 AND ${shoe_size} <= 8.0 THEN "{{_user_attributes['first_name']}}"
+          ELSE 'Non-Commercial'
+          END ;;
+  }
+
+  measure: dynamic_measure {
+    type: sum
+    sql: CASE WHEN {% condition string_input %} ${shoe_size_category} {% endcondition %} THEN 1
+    ELSE NULL END ;;
+  }
+
   dimension: annual_high {
     type: number
     sql: ${TABLE}.Annual_High ;;
