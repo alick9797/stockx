@@ -26,6 +26,34 @@ view: nike_trans {
     sql: ${TABLE}.Category ;;
   }
 
+  parameter: date_granularity {
+    type: string
+    default_value: "Month"
+    allowed_value: { value: "Day" }
+    allowed_value: { value: "Month" }
+    allowed_value: { value: "Quarter" }
+    allowed_value: { value: "Year" }
+  }
+
+  dimension: date_created {
+    type: string
+    label_from_parameter: date_granularity
+    description: "When the Opportunity was created. Use in conjunction with Date Granularity."
+    sql:
+    CASE
+    WHEN {% parameter date_granularity %} = 'Day' THEN CAST(${date_date} AS STRING)
+    WHEN {% parameter date_granularity %} = 'Month' THEN CAST(${date_month} AS STRING)
+    WHEN {% parameter date_granularity %} = 'Quarter' THEN CAST(${date_fiscal_quarter} AS STRING)
+    WHEN {% parameter date_granularity %} = 'Year' THEN CAST(${date_year} AS STRING)
+    ELSE NULL
+  END ;;
+#   html:
+#   {% if date_granularity._parameter_value == "'Quarter'" %}
+#   {{ date_fiscal_quarter._rendered_value }}
+#   {% else %}  {{ value }}
+#   {% endif %};;
+  }
+
   dimension_group: date {
     type: time
     timeframes: [
@@ -35,6 +63,7 @@ view: nike_trans {
       week,
       month,
       quarter,
+      fiscal_quarter,
       year
     ]
     sql: ${TABLE}.Date ;;
@@ -43,6 +72,7 @@ view: nike_trans {
   dimension: item_name {
     type: string
     sql: ${TABLE}.Item_Name ;;
+#     html: <p style="font-size:170%">{{value}}</p>  ;;
   }
 
   measure: price_total {
