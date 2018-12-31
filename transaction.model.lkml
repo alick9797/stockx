@@ -9,6 +9,11 @@ datagroup: product_data_group {
   max_cache_age: "4 hours"
 }
 
+datagroup: nike_transaction_check {
+  sql_trigger: SELECT MAX(nike_trans.Date) FROM StockX.nike_trans  AS nike_trans ;;
+  max_cache_age: "2 hours"
+}
+
 explore: adidas {
   join: adidas_trans {
     sql_on: ${adidas_trans.compound_pk} = ${adidas.compound_pk}  ;;
@@ -20,6 +25,7 @@ explore: adidas {
 explore: adidas_trans {}
 
 explore: nike {
+  persist_with: nike_transaction_check
   join: nike_trans {
     sql_on: ${nike_trans.compound_pk} = ${nike.compound_pk} ;;
     type: inner
