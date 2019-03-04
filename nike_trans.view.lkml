@@ -47,11 +47,11 @@ view: nike_trans {
     WHEN {% parameter date_granularity %} = 'Year' THEN CAST(${date_year} AS STRING)
     ELSE NULL
   END ;;
-#   html:
-#   {% if date_granularity._parameter_value == "'Quarter'" %}
-#   {{ date_fiscal_quarter._rendered_value }}
-#   {% else %}  {{ value }}
-#   {% endif %};;
+    html:
+    {% if date_granularity._parameter_value == "'Quarter'" %}
+    {{ date_fiscal_quarter._rendered_value }}
+    {% else %}  {{ value }}
+    {% endif %};;
   }
 
   dimension_group: date {
@@ -64,6 +64,8 @@ view: nike_trans {
       month,
       quarter,
       fiscal_quarter,
+      fiscal_month_num,
+      fiscal_year,
       year
     ]
     sql: ${TABLE}.Date ;;

@@ -7,31 +7,44 @@ view: nike {
     sql: CONCAT(${TABLE}.Item_Name, ' ', ${size});;
   }
 
-  filter: string_input {
-    type: string
-    suggestions: ["Commercial", "Non-Commercial"]
-  }
-
-  dimension: shoe_size_category {
-    type: string
-    sql: CASE WHEN ${shoe_size} <= 4.0 THEN 'Commercial'
-          WHEN ${shoe_size} > 4.0 THEN 'Non-Commercial'
-          END ;;
-  }
-
-  dimension: user_attribute_label {
-    type: string
-    sql: CASE WHEN ${shoe_size} <= 4.0 THEN "{{_user_attributes['last_name']}}"
-          WHEN ${shoe_size} > 4.0 AND ${shoe_size} <= 8.0 THEN "{{_user_attributes['first_name']}}"
-          ELSE 'Non-Commercial'
-          END ;;
-  }
-
-  measure: dynamic_measure {
-    type: sum
-    sql: CASE WHEN {% condition string_input %} ${shoe_size_category} {% endcondition %} THEN 1
-    ELSE NULL END ;;
-  }
+#   parameter: p_number_input {
+#     type: number
+#   }
+#
+#   dimension: parameter_as_a_value {
+#     type: number
+#     sql: COALESCE({% parameter p_number_input %}, 0) ;;
+#   }
+#
+#   dimension:  five_times {
+#     type: number
+#     sql: 5* {% parameter p_number_input %} ;;
+#   }
+#
+#   filter: f_string_input {
+#     type:  string
+# #     suggestions: ["Commercial", "Non-Commercial"]
+#     suggest_dimension: shoe_size_category
+#   }
+#
+#   measure: dynamic_count_of_string_input {
+#     type: sum
+#     sql: CASE WHEN  {% condition f_string_input %}
+#                     ${shoe_size_category}
+#                     {% endcondition %}
+#                   THEN 1
+#       ELSE NULL END ;;
+#   }
+#
+#   dimension: shoe_size_category {
+#     type: string
+#     sql: CASE WHEN ${shoe_size} <= 4.0 THEN 'Tiny Toed Totes'
+#           WHEN ${shoe_size} > 4.0 AND ${shoe_size} <= 9.0 THEN 'Regular Roxannes'
+#           WHEN ${shoe_size} > 9.0 AND ${shoe_size} <= 12.0 THEN 'Growth Spurts'
+#           WHEN ${shoe_size} > 12.0 AND ${shoe_size} <= 18.0 THEN 'Full on Flippers'
+#           WHEN ${shoe_size} > 18.0 THEN 'Boy, You Must Be Shaq'
+#           END ;;
+#   }
 
   dimension: annual_high {
     type: number
@@ -61,6 +74,7 @@ view: nike {
   dimension: brand {
     type: string
     sql: ${TABLE}.Brand ;;
+    tags: ["email"]
   }
 
   dimension: brand1 {
