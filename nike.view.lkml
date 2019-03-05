@@ -72,9 +72,10 @@ view: nike {
   }
 
   dimension: brand {
-    type: string
-    sql: ${TABLE}.Brand ;;
+
     tags: ["email"]
+    sql: ${TABLE}.Brand ;;
+
   }
 
   dimension: brand1 {
