@@ -12,6 +12,12 @@ view: adidas_trans {
     sql: ${TABLE}.Brand1 ;;
   }
 
+  dimension: is_collab {
+    type: yesno
+    sql: ${brand1} IS NOT NULL ;;
+  }
+
+
   dimension: price {
     type: number
     sql: ${TABLE}.Price ;;
@@ -81,4 +87,16 @@ view: adidas_trans {
     ]
   }
 
+}
+
+test: order_id_is_unique {
+  explore_source: adidas_trans {
+    column: brand {}
+    column: count {}
+    sorts: [count: desc]
+    limit: 1
+  }
+  assert: order_id_is_unique {
+    expression: ${adidas_trans.count} = 1 ;;
+  }
 }

@@ -136,7 +136,8 @@ view: adidas {
   }
 
   measure: count {
-    type: count
+    type: count_distinct
+    sql: ${item_name} ;;
     drill_fields: [item_name]
   }
 
