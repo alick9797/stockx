@@ -63,7 +63,7 @@ view: adidas {
     sql: ${TABLE}.Image_URL ;;
     link: {
       label: "transactional data"
-      url: "/dashboards/658/item_name={{ adidas.item_name}}"
+      url: "/dashboards/658?item_name={{ adidas.item_name}}"
     }
   }
 
@@ -73,9 +73,11 @@ view: adidas {
     html: <img src="{{rendered_value}}" height = 300 width = 400>;;
     link: {
       label: "transactional data"
-      url: "/dashboards/658?item_name={{ adidas.item_name}}"
+      url: "/dashboards/658?item_name={{ adidas.item_name}}&size={{ adidas.size }}&date={{_filters['adidas_trans.date'] | url_encode}}"
     }
   }
+
+
 
   dimension: item_name {
     type: string
@@ -107,6 +109,8 @@ view: adidas {
     type: string
     sql: cast(${TABLE}.Size AS string) ;;
   }
+
+
 
   dimension: shoe_size {
     type: number
