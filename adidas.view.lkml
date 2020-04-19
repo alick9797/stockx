@@ -61,13 +61,20 @@ view: adidas {
   dimension: image_url {
     type: string
     sql: ${TABLE}.Image_URL ;;
+    link: {
+      label: "transactional data"
+      url: "/dashboards/658/item_name={{ adidas.item_name}}"
+    }
   }
 
   dimension: image {
     type: string
     sql: ${TABLE}.Image_URL ;;
-    html: <img src="{{ value }}" height = 300 width = 500>;;
-
+    html: <img src="{{rendered_value}}" height = 300 width = 400>;;
+    link: {
+      label: "transactional data"
+      url: "/dashboards/658?item_name={{ adidas.item_name}}"
+    }
   }
 
   dimension: item_name {
@@ -125,7 +132,7 @@ view: adidas {
   }
 
   measure: average_price {
-    type: sum
+    type: average
     sql: ${TABLE}.Average_Price ;;
   }
 
