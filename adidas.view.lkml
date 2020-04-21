@@ -72,8 +72,12 @@ view: adidas {
     sql: ${TABLE}.Image_URL ;;
     html: <img src="{{rendered_value}}" height = 300 width = 400>;;
     link: {
-      label: "transactional data"
-      url: "/dashboards/658?item_name={{ adidas.item_name}}&size={{ adidas.size }}&date={{_filters['adidas_trans.date'] | url_encode}}"
+      label: "drill"
+      url: "/dashboards/658?item_name={{ adidas.item_name}}&size={{ adidas.size }}&date={{_filters['adidas_trans.date_year'] | url_encode}}"
+    }
+    link: {
+      label: "drill to item"
+      url: "/explore/transaction/adidas?fields=adidas.item_name,adidas.size&f[adidas.item_name]={{_filter['adidas.item_name']}}&f[adidas_trans.date_year]={{_filters['adidas_trans.date_year'] | url_encode}}"
     }
   }
 
@@ -82,7 +86,10 @@ view: adidas {
   dimension: item_name {
     type: string
     sql: ${TABLE}.Item_Name ;;
-    drill_fields: [size]
+    link: {
+      label: "drill to item"
+      url: "/explore/transaction/adidas?fields=adidas.item_name,adidas.size&f[adidas.item_name]={{_filter['adidas.item_name']&f[adidas_trans.date_year]={{_filters['adidas_trans.date_year'] | url_encode}}}}"
+    }
   }
 
   dimension: last_sale_price {

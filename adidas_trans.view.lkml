@@ -89,14 +89,25 @@ view: adidas_trans {
 
 }
 
-test: order_id_is_unique {
+# test: order_id_is_unique {
+#   explore_source: adidas_trans {
+#     column: brand {}
+#     column: count {}
+#     sorts: [count: desc]
+#     limit: 1
+#   }
+#   assert: order_id_is_unique {
+#     expression: ${adidas_trans.count} = 1 ;;
+#   }
+test: status_is_not_null {
   explore_source: adidas_trans {
     column: brand {}
-    column: count {}
-    sorts: [count: desc]
+    sorts: [brand: desc]
     limit: 1
   }
-  assert: order_id_is_unique {
-    expression: ${adidas_trans.count} = 1 ;;
+  assert: status_is_not_null {
+    expression: NOT is_null(${adidas_trans.item_name}) ;;
   }
+
+
 }
