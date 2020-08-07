@@ -22,7 +22,11 @@ explore: adidas {
   }
 }
 
-explore: adidas_trans {}
+explore: adidas_trans_test {}
+
+explore: adidas_trans {
+  sql_always_where: ${category} = "Y" ;;
+}
 
 explore: nike {
   persist_with: nike_transaction_check

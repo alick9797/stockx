@@ -93,7 +93,7 @@ view: brand_comparison {
   dimension: image {
     type: string
     sql: ${TABLE}.Image_URL ;;
-    html: <img src="{{ value }}" class="center" height = 160 width = 230>;;
+    html: <a href="{{ value }}" target="_blank"><img src="{{ value }}" class="center" height = 160 width = 230 ></a>;;
   }
 
   dimension: image_deet {

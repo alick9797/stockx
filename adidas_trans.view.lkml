@@ -1,26 +1,86 @@
 view: adidas_trans {
 
+  filter: date_fil {
+    type: date
+    default_value: "2 days ago"
+  }
+
+
+
   sql_table_name: StockX.adidas_trans ;;
 
+  parameter: date_param{
+    type: unquoted
+  }
+
+
+
+# derived_table: {
+#   sql: SELECT * FROM StockX.adidas_trans WHERE {% date_start date_fil %} ;;
+# }
+
+  dimension: email {
+    sql: {{ _user_attributes['email'] }}  ;;
+  }
+
   dimension: brand {
+    view_label: "brandz"
+    group_label: "BRANDS"
+    description: "brand1"
     type: string
     sql: ${TABLE}.Brand ;;
+    link: {
+      label: "copy"
+      url: "{{ value }}"
+    }
+    html: <a href="{{link}}">test</a> ;;
+#     html: <p font-size=150%> {{ rendered_value }} </p>
   }
 
   dimension: brand1 {
+    view_label: "brandz"
+#     group_label: "BRANDS"
+    description: "brand2"
     type: string
     sql: ${TABLE}.Brand1 ;;
+    link: {
+      label: "copy"
+      url: "{{ value }}"
+    }
   }
 
+  measure: brand_count_test {
+    type: count_distinct
+    sql: ${brand1} ;;
+
+  }
+#   measure: brands_test {
+#     type: list
+#     list_field: brand1
+#     sql: length(${brands_test}) ;;
+#   }
+
+#   dimension: tester {
+#     type: number
+#     sql: LENGTH(${brands_test}) ;;
+#   }
+
+#   measure: count {
+#     type: number
+#     sql: LENGTH(${brands_test}) ;;
+#   }
+#
   dimension: is_collab {
     type: yesno
     sql: ${brand1} IS NOT NULL ;;
+    html:  <div style="text-align:center;font-weight: bold; color:red">{{ rendered_value }}</div> ;;
   }
 
 
   dimension: price {
     type: number
     sql: ${TABLE}.Price ;;
+    value_format: "###.####"
   }
 
   dimension: category {
@@ -28,17 +88,23 @@ view: adidas_trans {
     sql: ${TABLE}.Category ;;
   }
 
+
+  dimension: date_start {
+    type: date
+    sql: {% date_start date_fil %} ;;
+  }
+
   dimension_group: date {
     type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
+#     timeframes: [
+#       raw,
+#       time,
+#       date,
+#       week,
+#       month,
+#       quarter,
+#       year
+#     ]
     sql: ${TABLE}.Date ;;
     drill_fields: [trans_detail*]
   }
@@ -55,6 +121,23 @@ view: adidas_trans {
     drill_fields: [item_name, date_date, size, price]
   }
 
+  measure: price_25 {
+    type: percentile
+    percentile: 25
+    sql: ${TABLE}.Price ;;
+  }
+
+  measure: price_50 {
+    type: median
+    sql: ${TABLE}.Price ;;
+  }
+
+  measure: price_75 {
+    type: percentile
+    percentile: 75
+    sql: ${TABLE}.Price ;;
+  }
+
   dimension: size {
     type: string
     sql: cast(${TABLE}.Size AS string) ;;
@@ -63,6 +146,7 @@ view: adidas_trans {
   dimension: shoe_size {
     type: number
     sql: ${TABLE}.Size ;;
+    value_format: "##.#"
   }
 
   dimension: compound_pk {
@@ -79,6 +163,8 @@ view: adidas_trans {
   measure: count {
     type: count
     drill_fields: [item_name]
+#     html: <a href="{{link}}">test</a> ;;
+    html: {{rendered_value}}  ;;
   }
 
   set: trans_detail {
