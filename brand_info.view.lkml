@@ -1,3 +1,4 @@
+
 view: brand_comparison {
 
   derived_table: {
