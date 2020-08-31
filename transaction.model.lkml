@@ -1,12 +1,18 @@
 connection: "lookerdata_standard_sql"
 
-include: "*.view.lkml"         # include all views in this project
+include: "*.view.lkml"
+include: "trans_explores.explore.lkml"
+# include all views in this project
 # include: "*.dashboard.lookml"  # include all dashboards in this project
 
 datagroup: product_data_group {
   max_cache_age: "4 hours"
 }
 
+datagroup: nike_transaction_check {
+  sql_trigger: SELECT MAX(nike_trans.Date) FROM StockX.nike_trans  AS nike_trans ;;
+  max_cache_age: "2 hours"
+}
 
 explore: adidas {
   join: adidas_trans {
@@ -19,6 +25,7 @@ explore: adidas {
 explore: adidas_trans {}
 
 explore: nike {
+  persist_with: nike_transaction_check
   join: nike_trans {
     sql_on: ${nike_trans.compound_pk} = ${nike.compound_pk} ;;
     type: inner

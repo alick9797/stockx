@@ -7,6 +7,10 @@ datagroup: product_data_group {
   max_cache_age: "4 hours"
 }
 
+datagroup: nike_transaction_check {
+  sql_trigger: SELECT MAX(nike_trans.Date) FROM StockX.nike_trans  AS nike_trans ;;
+  max_cache_age: "2 hours"
+}
 
 explore: brand_comparison {
   join: trans_info {
@@ -28,4 +32,6 @@ explore: trans_info {
 }
 
 
-explore: nike {}
+explore: nike {
+  persist_with: nike_transaction_check
+}

@@ -61,19 +61,35 @@ view: adidas {
   dimension: image_url {
     type: string
     sql: ${TABLE}.Image_URL ;;
+    link: {
+      label: "transactional data"
+      url: "/dashboards/658?item_name={{ adidas.item_name}}"
+    }
   }
 
   dimension: image {
     type: string
     sql: ${TABLE}.Image_URL ;;
-    html: <img src="{{ value }}" height = 300 width = 500>;;
-
+    html: <img src="{{rendered_value}}" height = 300 width = 400>;;
+    link: {
+      label: "drill"
+      url: "/dashboards/658?item_name={{ adidas.item_name}}&size={{ adidas.size }}&date={{_filters['adidas_trans.date_year'] | url_encode}}"
+    }
+    link: {
+      label: "drill to item"
+      url: "/explore/transaction/adidas?fields=adidas.item_name,adidas.size&f[adidas.item_name]={{_filter['adidas.item_name']}}&f[adidas_trans.date_year]={{_filters['adidas_trans.date_year'] | url_encode}}"
+    }
   }
+
+
 
   dimension: item_name {
     type: string
     sql: ${TABLE}.Item_Name ;;
-    drill_fields: [size]
+    link: {
+      label: "drill to item"
+      url: "/explore/transaction/adidas?fields=adidas.item_name,adidas.size&f[adidas.item_name]={{_filter['adidas.item_name']&f[adidas_trans.date_year]={{_filters['adidas_trans.date_year'] | url_encode}}}}"
+    }
   }
 
   dimension: last_sale_price {
@@ -101,6 +117,8 @@ view: adidas {
     sql: cast(${TABLE}.Size AS string) ;;
   }
 
+
+
   dimension: shoe_size {
     type: number
     sql: ${TABLE}.Size ;;
@@ -125,7 +143,7 @@ view: adidas {
   }
 
   measure: average_price {
-    type: sum
+    type: average
     sql: ${TABLE}.Average_Price ;;
   }
 
@@ -136,7 +154,8 @@ view: adidas {
   }
 
   measure: count {
-    type: count
+    type: count_distinct
+    sql: ${item_name} ;;
     drill_fields: [item_name]
   }
 

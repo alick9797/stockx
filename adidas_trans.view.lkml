@@ -12,6 +12,12 @@ view: adidas_trans {
     sql: ${TABLE}.Brand1 ;;
   }
 
+  dimension: is_collab {
+    type: yesno
+    sql: ${brand1} IS NOT NULL ;;
+  }
+
+
   dimension: price {
     type: number
     sql: ${TABLE}.Price ;;
@@ -80,5 +86,28 @@ view: adidas_trans {
       adidas_trans.item_name, adidas_trans.size, adidas_trans.Price
     ]
   }
+
+}
+
+# test: order_id_is_unique {
+#   explore_source: adidas_trans {
+#     column: brand {}
+#     column: count {}
+#     sorts: [count: desc]
+#     limit: 1
+#   }
+#   assert: order_id_is_unique {
+#     expression: ${adidas_trans.count} = 1 ;;
+#   }
+test: status_is_not_null {
+  explore_source: adidas_trans {
+    column: brand {}
+    sorts: [brand: desc]
+    limit: 1
+  }
+  assert: status_is_not_null {
+    expression: NOT is_null(${adidas_trans.item_name}) ;;
+  }
+
 
 }

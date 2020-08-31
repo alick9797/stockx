@@ -1,6 +1,7 @@
 view: dates_dimension {
   derived_table: {
-    sql: SELECT CURRENT_DATE() - generate_series(0, 365 * 3 - 1) AS date ;;
+    sql: SELECT *
+FROM UNNEST(GENERATE_DATE_ARRAY(DATE_ADD(CURRENT_DATE(), INTERVAL -365*3 day), CURRENT_DATE())) as date ;;
   }
 
   dimension: primary_key {
