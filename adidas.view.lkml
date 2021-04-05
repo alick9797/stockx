@@ -3,7 +3,7 @@ view: adidas {
 
   dimension: compound_pk {
     primary_key: yes
-    hidden: no
+    #hidden: no
     sql: CONCAT(${TABLE}.Item_Name, ' ', ${size});;
   }
 
@@ -19,6 +19,10 @@ view: adidas {
 
   dimension: ask_count {
     type: number
+    sql: ${TABLE}.Ask_Count ;;
+  }
+
+  dimension: ask_count_String {
     sql: ${TABLE}.Ask_Count ;;
   }
 
